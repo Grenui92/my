@@ -13,47 +13,45 @@ class NoteBook(UserDict):
             cls.__instance = object.__new__(cls)
         return cls.__instance
 
-    def __init__(self, file_path=os.path.join("interface", "node_book.bin")):
+    def __init__(self, file_path=os.path.join("files", "node_book.bin")):
         super().__init__()
         self.file_path = file_path
 
-    def create_new_note(self, name: str, info: list) -> str:
-        if name not in self.data:
+    def create_new_note(self, title: str, text: str) -> str:
+        if title not in self.data:
             tags = []
-            for piece in info:  # Search tags in all text
+            for piece in text.split():  # Search tags in all text
                 if piece.startswith("#"):
                     tags.append(piece)
-            info_new = " ".join(info)
-            self.data[name] = Note(name, tags, info_new)
-            return f"Note with name {name} successfully create."
+            self.data[title] = Note(title, tags, text)
+            return f"Note with name {title} successfully create."
         else:
-            raise KeyError(f"Note with name {name} already exist.")
+            raise KeyError(f"Note with name {title} already exist.")
 
-    def add_note(self, name: str, info: list) -> str:
+    def add_note(self, title: str, text: str) -> str:
         tags = []
-        for piece in info:  # Ищем теги в тексте, именно так они добавляются изначально
+        for piece in text.split():  # Ищем теги в тексте, именно так они добавляются изначально
             if piece.startswith("#"):
                 tags.append(piece)
-        info = " ".join(info)
-        self.data[name].add_content(tags, info)
-        return f"Information successfully added to {name}."
+        self.data[title].add_content(tags, text)
+        return f"Information successfully added to {title}."
 
-    def clear_note(self, name: str) -> str:
-        self.data[name].clear_tags()
-        self.data[name].clear_text()
-        return f"Note named {name} successfully cleared."
+    def clear_note(self, title: str) -> str:
+        self.data[title].clear_tags()
+        self.data[title].clear_text()
+        return f"Note named {title} successfully cleared."
 
-    def clear_text(self, name: str) -> str:
-        self.data[name].clear_text()
-        return f"Text in {name} cleared."
+    def clear_text(self, title: str) -> str:
+        self.data[title].clear_text()
+        return f"Text in {title} cleared."
 
-    def clear_tags(self, name: str) -> str:
-        self.data[name].clear_tags()
-        return f"Tags in {name} cleared."
+    def clear_tags(self, title: str) -> str:
+        self.data[title].clear_tags()
+        return f"Tags in {title} cleared."
 
-    def del_note(self, name: str) -> str:
-        del self.data[name]
-        return f"Note named {name} successfully deleted."
+    def del_note(self, title: str) -> str:
+        del self.data[title]
+        return f"Note named {title} successfully deleted."
 
     def search_in_text(self, info: str) -> list:
         result = []
@@ -61,9 +59,9 @@ class NoteBook(UserDict):
             if info in note.text or info == note.name:
                 if not result:
                     result = [f"Search results for {info} in text:\n"]
-                result.append(f"Name: {note.name}\n"
-                              f"\tTags: {note.tags}\n"
-                              f"\tText: {note.text}\n")
+                result.append(f"\nName: {note.name}\n"
+                              f"Tags: {note.tags}\n"
+                              f"Text: {note.text}\n")
         return result if result else [f"Search results for {info} in text:\nEmpty"]
 
     def search_in_tags(self, info: str) -> list:
@@ -72,23 +70,23 @@ class NoteBook(UserDict):
             if info in note.tags or info == note.name:
                 if not result:
                     result = [f"Search results for {info} in text:\n"]
-                result.append(f"Name: {note.name}\n"
-                              f"\tTags: {note.tags}\n"
-                              f"\tText: {note.text}\n")
+                result.append(f"\nName: {note.name}\n"
+                              f"Tags: {note.tags}\n"
+                              f"Text: {note.text}\n")
         return result if result else [f"Search results for {info} in text:\nEmpty"]
 
-    def show_note(self, name: str) -> str:
-        note = self.data[name]
-        return f" Name: {note.name}\n" \
-               f"\tTags: {note.tags}\n" \
-               f"\tText: {note.text}\n"
+    def show_note(self, title: str) -> str:
+        note = self.data[title]
+        return f"\nName: {note.name}\n" \
+               f"Tags: {note.tags}\n" \
+               f"Text: {note.text}\n"
 
     def show_all(self) -> list:
         result = []
         for name, note in self.data.items():
-            result.append(f"Name: {note.name}\n"
-                          f"\tTags: {note.tags}\n"
-                          f"\tText: {note.text}\n")
+            result.append(f"\nName: {note.name}\n"
+                          f"Tags: {note.tags}\n"
+                          f"Text: {note.text}\n")
         return result
 
     def sort_by_tags(self, tags: list) -> list:
@@ -99,10 +97,15 @@ class NoteBook(UserDict):
                 if tag in note.tags:
                     cnt += 1 if tag in note.tags else 0
             result.append(f"Coincidences with tags {[i for i in tags if i]}: {cnt}\n" 
-                          f"Name: {note.name}\n"
-                          f"\tTags: {note.tags}\n"
-                          f"\tText: {note.text}\n")
+                          f"\nName: {note.name}\n"
+                          f"Tags: {note.tags}\n"
+                          f"Text: {note.text}\n")
         return sorted(result, reverse=True)
+
+
+    def clear_all_book(self):
+        self.data.clear()
+        return f"Book successfully cleared."
 
     def save_to_file(self) -> str:
         with open(self.file_path, "wb") as file:

@@ -11,7 +11,7 @@ class FileSorter:
             raise FileExistsError(f"Wrong path: {self.path}")
         self.i_know = set()
         self.files_list = {}
-        self.absolute_folders = self.__new_absolute_folders_create()
+        self.absolute_folders = self.new_absolute_folders_create()
         self.translate_map: dict = self.__new_translate_map()
 
     def job(self):
@@ -117,27 +117,23 @@ class FileSorter:
                           1103: 'ya', 1105: 'yo', 105: 'i', 1031: 'ji', 1169: 'g'}
         return translated_map
 
-    def __new_absolute_folders_create(self) -> dict:
-        absolute_folder = {'archives': ['zip', 'gz', 'tar'], 'video': ['avi', 'mp4', 'mov', 'mkv'], 'audio': ['mp3', 'ogg', 'wav', 'amr'],
-                           'documents': ['doc', 'docx', 'txt', 'pdf', 'xlsx', 'pptx'], 'images': ['jpeg', 'png', 'jpg', 'svg'], 'others': [],
-                           'torrent': ['torrent'], 'programs': ['exe']}
+    @staticmethod
+    def new_absolute_folders_create():
+
         print("Вот по таким папкам в соответствии с расширениями будут отсортированы файлы:")
         for k, v in absolute_folder.items():
             print(f'Папка {k} будет включать в себя файлы с расширением {v}')
-        print('Можно добавить интересующие вас папки, по которым будут рассортированы файлы.')
-        while True:
-            name = input('*****\n'
-                         'Если хотите добавить расширение - с начала введите название существующей папки. \n'
-                         'Если хотите создать новую папку - введите ее название. \n'
-                         'Принимаются только буквы латиницы и цифры.\n'
-                         'Если не хотите предпринимать никаких действий - введите STOP/EXIT: ')
-            if name.upper() in ('STOP', 'EXIT'):
-                break
-            if not name.isalnum():
-                print(f'Введенные данные {name} не соответствую требованиям (принимаются только латинские буквы и цифры). Попробуйте вновь.')
-                continue
-            absolute_folder.setdefault(name, []).append(input(f'Введите расширение в формате exe (без точки), чтоб добавить в папку {name}: '))
-        return absolute_folder
+
+    def add_folder(self, name: str):
+        if name not in self.absolute_folders:
+            self.absolute_folders[name] = []
+            return f"Folder {name} successfully added."
+        else:
+            return f"Folder {name} already exist."
+
+    def add_file_extension(self, name: str, extension: str):
+        self.absolute_folders[name].append(extension)
+        return f"Extension {extension} successfully added to folder {name}"
 
 
 

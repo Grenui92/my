@@ -14,7 +14,7 @@ class AddressBook(UserDict):
         return cls.__instance
 
 
-    def __init__(self, file_path=os.path.join("interface", "contact_book.bin")):
+    def __init__(self, file_path=os.path.join("files", "contact_book.bin")):
         super().__init__()
         self.file_path = file_path
 

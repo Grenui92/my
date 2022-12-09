@@ -116,6 +116,7 @@ def main():
         else:
             print("Clearing canceled.")
 
+    @bug_catcher
     def save_to_file():
         print(book.save_to_file())
 
@@ -267,27 +268,27 @@ def main():
     show_nearest_birthdays_entry_days.grid(row=9, column=4, sticky="ew")
 
     days_to_birthday_button.grid(row=2, sticky="ew")
-    label_name = tk.Label(text="Name:")
+    label_name = tk.Label(window_con, text="Name:")
     label_name.grid(row=2, column=1, sticky="ew")
     days_to_birthday_entry_name = tk.Entry(window_con, width=10)
     days_to_birthday_entry_name.grid(row=2, column=2)
 
     clear_one_contact_button.grid(row=10, sticky="ew")
-    label_name = tk.Label(text="Name:")
+    label_name = tk.Label(window_con, text="Name:")
     label_name.grid(row=10, column=1)
     clear_one_contact_entry_name = tk.Entry(window_con, width=10)
     clear_one_contact_entry_name.grid(row=10, column=2, sticky="ew")
-    label_field = tk.Label(text="Field (if empty - it will clear ALL fields):")
+    label_field = tk.Label(window_con, text="Field (if empty - it will clear ALL fields):")
     label_field.grid(row=10, column=3, columnspan=2, sticky="ew")
     clear_one_contact_entry_field = tk.Entry(window_con, width=10)
     clear_one_contact_entry_field.grid(row=10, column=5, sticky="ew")
-    label_sure = tk.Label(text="Are you sure that you want to clear? Y/N:")
+    label_sure = tk.Label(window_con, text="Are you sure that you want to clear? Y/N:")
     label_sure.grid(row=10, column=6, columnspan=2, sticky="ew")
     clear_one_contact_entry_sure = tk.Entry(window_con)
     clear_one_contact_entry_sure.grid(row=10, column=8, sticky="ew")
 
     clear_book_button.grid(row=11, sticky="ew")
-    label_filed = tk.Label(text="Are you sure?! This button will delete all information from Contact Book! Y/N:")
+    label_filed = tk.Label(window_con, text="Are you sure?! This button will delete all information from Contact Book! Y/N:")
     label_filed.grid(row=11, column=1, columnspan=5, sticky="ew")
     clear_book_entry_sure = tk.Entry(window_con, width=10)
     clear_book_entry_sure.grid(row=11, column=6, sticky="w")
